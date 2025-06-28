@@ -1,0 +1,32 @@
+{
+	"yolo_model": "yolov8m.pt",
+	"reid_model": "osnet_x1_0",
+	"device": "cuda",
+	"similarity_threshold": 0.87,
+	"disappearance_limit_seconds": 8,
+	"min_detection_confidence": 0.4,
+	"output_video": true,
+	"save_embeddings": true,
+	"visualization": {
+		"show_confidence": true,
+		"show_track_id": true,
+		"bbox_thickness": 3,
+		"font_scale": 0.8,
+		"colors": {
+			"new_person": [0, 255, 0],
+			"reidentified": [0, 255, 255],
+			"text_background": [0, 0, 0]
+		}
+	},
+	"performance": {
+		"log_interval": 100,
+		"max_tracked_persons": 100,
+		"embedding_update_interval": 15
+	},
+	"notes": {
+		"description": "Configuración optimizada para GPU potente",
+		"use_case": "Sistemas con GPU NVIDIA y CUDA",
+		"expected_fps": "15-30 FPS con GPU moderna",
+		"memory_usage": "~4GB GPU RAM"
+	}
+}

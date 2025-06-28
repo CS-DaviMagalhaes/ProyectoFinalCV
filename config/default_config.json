@@ -1,0 +1,41 @@
+{
+	"yolo_model": "yolov8n.pt",
+	"reid_model": "osnet_x1_0",
+	"device": "cuda",
+	"similarity_threshold": 0.85,
+	"disappearance_limit_seconds": 5,
+	"min_detection_confidence": 0.5,
+	"output_video": true,
+	"save_embeddings": false,
+	"visualization": {
+		"show_confidence": true,
+		"show_track_id": true,
+		"bbox_thickness": 2,
+		"font_scale": 0.7,
+		"colors": {
+			"new_person": [0, 255, 0],
+			"reidentified": [0, 255, 255],
+			"text_background": [0, 0, 0]
+		}
+	},
+	"performance": {
+		"log_interval": 100,
+		"max_tracked_persons": 50,
+		"embedding_update_interval": 10
+	},
+	"models": {
+		"yolo_alternatives": [
+			"yolov8n.pt",
+			"yolov8s.pt",
+			"yolov8m.pt",
+			"yolov8l.pt"
+		],
+		"reid_alternatives": [
+			"osnet_x1_0",
+			"osnet_x0_25",
+			"osnet_ain_x1_0",
+			"resnet50",
+			"mobilenetv2_x1_0"
+		]
+	}
+}

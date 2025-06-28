@@ -1,0 +1,32 @@
+{
+	"yolo_model": "yolov8n.pt",
+	"reid_model": "osnet_x0_25",
+	"device": "cpu",
+	"similarity_threshold": 0.8,
+	"disappearance_limit_seconds": 3,
+	"min_detection_confidence": 0.6,
+	"output_video": true,
+	"save_embeddings": false,
+	"visualization": {
+		"show_confidence": true,
+		"show_track_id": true,
+		"bbox_thickness": 1,
+		"font_scale": 0.6,
+		"colors": {
+			"new_person": [0, 255, 0],
+			"reidentified": [255, 255, 0],
+			"text_background": [0, 0, 0]
+		}
+	},
+	"performance": {
+		"log_interval": 50,
+		"max_tracked_persons": 20,
+		"embedding_update_interval": 5
+	},
+	"notes": {
+		"description": "Configuración optimizada para CPU",
+		"use_case": "Sistemas sin GPU o con recursos limitados",
+		"expected_fps": "3-8 FPS dependiendo del hardware",
+		"memory_usage": "~1GB RAM"
+	}
+}

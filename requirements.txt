@@ -1,0 +1,47 @@
+# Dependencias principales para Re-identificación de Personas
+# =========================================================
+
+# Modelos de detección y tracking
+ultralytics>=8.0.0
+
+# Re-identificación con Torchreid
+torch>=1.9.0
+torchvision>=0.10.0
+torchaudio>=0.9.0
+
+# Instalar Torchreid desde GitHub (usar después de instalar las dependencias base)
+# git+https://github.com/KaiyangZhou/deep-person-reid.git
+
+# Procesamiento de imágenes y video
+opencv-python>=4.5.0
+Pillow>=8.0.0
+
+# Análisis numérico
+numpy<2.0
+scipy>=1.7.0
+
+# Utilidades y logging
+tqdm>=4.60.0
+matplotlib>=3.3.0
+seaborn>=0.11.0
+
+# Configuración y argumentos
+argparse
+json5
+pyyaml>=5.4.0
+
+# Métricas y evaluación
+scikit-learn>=1.0.0
+
+# Opcional: Para sistemas con GPU NVIDIA
+# torch-audio (instalado con torch)
+# Asegúrate de tener CUDA instalado en tu sistema
+
+# Desarrollo y testing (opcional)
+pytest>=6.0.0
+black>=21.0.0
+flake8>=3.9.0
+
+# Jupyter notebooks (opcional para análisis)
+jupyter>=1.0.0
+ipywidgets>=7.6.0 
