@@ -32,6 +32,7 @@ pyyaml>=5.4.0
 
 # Métricas y evaluación
 scikit-learn>=1.0.0
+pandas>=1.5.0
 
 # Opcional: Para sistemas con GPU NVIDIA
 # torch-audio (instalado con torch)

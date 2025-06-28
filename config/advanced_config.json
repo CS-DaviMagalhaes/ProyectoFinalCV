@@ -1,0 +1,582 @@
+{
+  "_meta": {
+    "version": "2.0",
+    "description": "Configuración avanzada completa para Sistema de Re-identificación de Personas",
+    "author": "ProyectoFinalCV",
+    "last_updated": "2024-01-01",
+    "documentation": "https://kaiyangzhou.github.io/deep-person-reid/"
+  },
+
+  "active_profile": "balanced",
+
+  "profiles": {
+    "ultrafast": {
+      "yolo_model": "yolov8n.pt",
+      "reid_model": "osnet_x0_25",
+      "device": "cpu",
+      "similarity_threshold": 0.75,
+      "disappearance_limit_seconds": 3,
+      "min_detection_confidence": 0.3,
+      "description": "Máxima velocidad, mínima precisión"
+    },
+    "fast": {
+      "yolo_model": "yolov8n.pt",
+      "reid_model": "osnet_x0_5",
+      "device": "cuda",
+      "similarity_threshold": 0.80,
+      "disappearance_limit_seconds": 5,
+      "min_detection_confidence": 0.4,
+      "description": "Balance velocidad-precisión para tiempo real"
+    },
+    "balanced": {
+      "yolo_model": "yolov8s.pt",
+      "reid_model": "osnet_x1_0",
+      "device": "cuda",
+      "similarity_threshold": 0.85,
+      "disappearance_limit_seconds": 7,
+      "min_detection_confidence": 0.5,
+      "description": "Configuración equilibrada recomendada"
+    },
+    "accurate": {
+      "yolo_model": "yolov8m.pt",
+      "reid_model": "osnet_ain_x1_0",
+      "device": "cuda",
+      "similarity_threshold": 0.90,
+      "disappearance_limit_seconds": 10,
+      "min_detection_confidence": 0.6,
+      "description": "Alta precisión para aplicaciones críticas"
+    },
+    "ultra_accurate": {
+      "yolo_model": "yolov8l.pt",
+      "reid_model": "resnet50",
+      "device": "cuda",
+      "similarity_threshold": 0.92,
+      "disappearance_limit_seconds": 15,
+      "min_detection_confidence": 0.7,
+      "description": "Máxima precisión, requiere GPU potente"
+    }
+  },
+
+  "models": {
+    "yolo": {
+      "available_models": [
+        {
+          "name": "yolov8n.pt",
+          "size": "nano",
+          "params": "3.2M",
+          "speed": "ultrafast",
+          "accuracy": "low",
+          "memory": "minimal",
+          "description": "Modelo más rápido, para prototipos y sistemas limitados"
+        },
+        {
+          "name": "yolov8s.pt",
+          "size": "small",
+          "params": "11.2M",
+          "speed": "fast",
+          "accuracy": "medium",
+          "memory": "low",
+          "description": "Balance óptimo velocidad-precisión"
+        },
+        {
+          "name": "yolov8m.pt",
+          "size": "medium",
+          "params": "25.9M",
+          "speed": "medium",
+          "accuracy": "high",
+          "memory": "medium",
+          "description": "Buena precisión, velocidad aceptable"
+        },
+        {
+          "name": "yolov8l.pt",
+          "size": "large",
+          "params": "43.7M",
+          "speed": "slow",
+          "accuracy": "very_high",
+          "memory": "high",
+          "description": "Máxima precisión de detección"
+        },
+        {
+          "name": "yolov8x.pt",
+          "size": "xlarge",
+          "params": "68.2M",
+          "speed": "very_slow",
+          "accuracy": "ultra_high",
+          "memory": "very_high",
+          "description": "Modelo más preciso, requiere hardware potente"
+        }
+      ],
+      "custom_models": {
+        "enable_custom": false,
+        "custom_model_path": "",
+        "model_format": "pt"
+      }
+    },
+
+    "reid": {
+      "osnet_family": [
+        {
+          "name": "osnet_x0_25",
+          "params": "0.17M",
+          "gflops": 0.026,
+          "speed": "ultrafast",
+          "accuracy": "medium",
+          "description": "OSNet más ligero, ideal para CPU"
+        },
+        {
+          "name": "osnet_x0_5",
+          "params": "0.37M",
+          "gflops": 0.063,
+          "speed": "fast",
+          "accuracy": "good",
+          "description": "OSNet compacto con buen rendimiento"
+        },
+        {
+          "name": "osnet_x0_75",
+          "params": "0.65M",
+          "gflops": 0.128,
+          "speed": "medium",
+          "accuracy": "very_good",
+          "description": "OSNet intermedio balanceado"
+        },
+        {
+          "name": "osnet_x1_0",
+          "params": "1.02M",
+          "gflops": 0.213,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "OSNet estándar, mejor balance general"
+        },
+        {
+          "name": "osnet_ibn_x1_0",
+          "params": "1.02M",
+          "gflops": 0.213,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "OSNet con Instance Batch Normalization"
+        },
+        {
+          "name": "osnet_ain_x0_25",
+          "params": "0.17M",
+          "gflops": 0.026,
+          "speed": "fast",
+          "accuracy": "good",
+          "description": "OSNet AIN ultraligero"
+        },
+        {
+          "name": "osnet_ain_x0_5",
+          "params": "0.37M",
+          "gflops": 0.063,
+          "speed": "fast",
+          "accuracy": "very_good",
+          "description": "OSNet AIN compacto"
+        },
+        {
+          "name": "osnet_ain_x0_75",
+          "params": "0.65M",
+          "gflops": 0.128,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "OSNet AIN intermedio"
+        },
+        {
+          "name": "osnet_ain_x1_0",
+          "params": "1.02M",
+          "gflops": 0.213,
+          "speed": "medium",
+          "accuracy": "outstanding",
+          "description": "OSNet AIN completo, máxima precisión OSNet"
+        }
+      ],
+
+      "resnet_family": [
+        {
+          "name": "resnet18",
+          "params": "11.2M",
+          "gflops": 1.8,
+          "speed": "fast",
+          "accuracy": "good",
+          "description": "ResNet ligero, buena opción general"
+        },
+        {
+          "name": "resnet34",
+          "params": "21.3M",
+          "gflops": 3.7,
+          "speed": "medium",
+          "accuracy": "very_good",
+          "description": "ResNet intermedio"
+        },
+        {
+          "name": "resnet50",
+          "params": "23.5M",
+          "gflops": 4.1,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "ResNet estándar, muy utilizado"
+        },
+        {
+          "name": "resnet101",
+          "params": "42.5M",
+          "gflops": 7.8,
+          "speed": "slow",
+          "accuracy": "outstanding",
+          "description": "ResNet profundo, alta precisión"
+        },
+        {
+          "name": "resnet152",
+          "params": "58.2M",
+          "gflops": 11.6,
+          "speed": "very_slow",
+          "accuracy": "outstanding",
+          "description": "ResNet más profundo"
+        },
+        {
+          "name": "resnext50_32x4d",
+          "params": "23.0M",
+          "gflops": 4.2,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "ResNeXt optimizado"
+        },
+        {
+          "name": "resnext101_32x8d",
+          "params": "86.8M",
+          "gflops": 16.5,
+          "speed": "slow",
+          "accuracy": "outstanding",
+          "description": "ResNeXt de alta capacidad"
+        },
+        {
+          "name": "resnet50_fc512",
+          "params": "23.9M",
+          "gflops": 4.1,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "ResNet50 con capa FC personalizada"
+        }
+      ],
+
+      "mobile_family": [
+        {
+          "name": "mobilenetv2_x1_0",
+          "params": "2.2M",
+          "gflops": 0.3,
+          "speed": "very_fast",
+          "accuracy": "good",
+          "description": "Optimizado para dispositivos móviles"
+        },
+        {
+          "name": "mobilenetv2_x1_4",
+          "params": "4.3M",
+          "gflops": 0.6,
+          "speed": "fast",
+          "accuracy": "very_good",
+          "description": "MobileNet más ancho"
+        }
+      ],
+
+      "other_models": [
+        {
+          "name": "shufflenet",
+          "params": "1.0M",
+          "gflops": 0.15,
+          "speed": "very_fast",
+          "accuracy": "medium",
+          "description": "Modelo extremadamente eficiente"
+        },
+        {
+          "name": "mlfn",
+          "params": "32.5M",
+          "gflops": 2.8,
+          "speed": "medium",
+          "accuracy": "excellent",
+          "description": "Multi-Level Factorisation Net"
+        },
+        {
+          "name": "densenet121",
+          "params": "6.9M",
+          "gflops": 2.9,
+          "speed": "medium",
+          "accuracy": "very_good",
+          "description": "DenseNet compacto"
+        },
+        {
+          "name": "senet154",
+          "params": "113.0M",
+          "gflops": 20.7,
+          "speed": "very_slow",
+          "accuracy": "outstanding",
+          "description": "SENet de alta capacidad"
+        }
+      ],
+
+      "custom_models": {
+        "enable_custom": false,
+        "custom_model_path": "",
+        "model_weights_path": "",
+        "input_size": [256, 128],
+        "feature_dim": 512
+      }
+    }
+  },
+
+  "detection_settings": {
+    "min_detection_confidence": 0.5,
+    "max_detections_per_frame": 100,
+    "nms_threshold": 0.45,
+    "iou_threshold": 0.5,
+    "track_buffer": 30,
+    "frame_rate": 30,
+    "match_threshold": 0.8,
+    "filters": {
+      "min_bbox_area": 1000,
+      "max_bbox_area": 50000,
+      "min_aspect_ratio": 0.3,
+      "max_aspect_ratio": 5.0,
+      "edge_buffer_pixels": 10
+    }
+  },
+
+  "reid_settings": {
+    "similarity_threshold": 0.85,
+    "similarity_metric": "cosine",
+    "feature_normalization": true,
+    "embedding_size": 512,
+    "batch_processing": false,
+    "batch_size": 32,
+    "preprocessing": {
+      "resize_method": "bilinear",
+      "target_size": [256, 128],
+      "normalize": true,
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
+    },
+    "postprocessing": {
+      "feature_fusion": false,
+      "temporal_smoothing": false,
+      "smoothing_window": 5
+    }
+  },
+
+  "memory_management": {
+    "disappearance_limit_seconds": 5,
+    "max_stored_embeddings": 1000,
+    "cleanup_interval_frames": 300,
+    "embedding_update_strategy": "replace",
+    "memory_cleanup_threshold": 0.8,
+    "persistent_storage": {
+      "enable_disk_cache": false,
+      "cache_directory": "./cache/embeddings",
+      "max_cache_size_mb": 500,
+      "cache_compression": true
+    }
+  },
+
+  "tracking_settings": {
+    "max_age": 30,
+    "min_hits": 3,
+    "iou_threshold": 0.3,
+    "use_byte_tracker": true,
+    "track_high_threshold": 0.6,
+    "track_low_threshold": 0.1,
+    "new_track_threshold": 0.7,
+    "match_threshold": 0.8
+  },
+
+  "performance_optimization": {
+    "device": "cuda",
+    "gpu_id": 0,
+    "mixed_precision": false,
+    "torch_compile": false,
+    "num_workers": 4,
+    "pin_memory": true,
+    "non_blocking": true,
+    "optimize_for_inference": true,
+    "tensorrt_optimization": {
+      "enable": false,
+      "precision": "fp16",
+      "workspace_size": 1073741824
+    }
+  },
+
+  "input_settings": {
+    "video": {
+      "input_source": "",
+      "input_type": "file",
+      "webcam_id": 0,
+      "rtsp_url": "",
+      "frame_skip": 0,
+      "max_frames": -1,
+      "start_frame": 0,
+      "resize_input": false,
+      "input_resolution": [1280, 720]
+    },
+    "image_sequence": {
+      "input_directory": "",
+      "image_format": "jpg",
+      "frame_rate": 30,
+      "sort_by": "name"
+    }
+  },
+
+  "output_settings": {
+    "save_video": true,
+    "output_path": "output/",
+    "video_codec": "mp4v",
+    "video_quality": 95,
+    "save_frames": false,
+    "frame_format": "jpg",
+    "save_trajectories": false,
+    "save_embeddings": false,
+    "save_statistics": true,
+    "real_time_display": true
+  },
+
+  "visualization": {
+    "display_settings": {
+      "show_bboxes": true,
+      "show_ids": true,
+      "show_confidence": true,
+      "show_similarity": false,
+      "show_trajectories": false,
+      "trajectory_length": 30,
+      "font_scale": 0.7,
+      "font_thickness": 2,
+      "bbox_thickness": 2,
+      "line_thickness": 2
+    },
+    "colors": {
+      "new_person": [0, 255, 0],
+      "reidentified_person": [0, 255, 255],
+      "lost_track": [128, 128, 128],
+      "uncertain": [0, 165, 255],
+      "text_color": [255, 255, 255],
+      "text_background": [0, 0, 0],
+      "trajectory_color": [255, 0, 255]
+    },
+    "ui_elements": {
+      "show_stats_panel": true,
+      "panel_position": "top_left",
+      "panel_transparency": 0.7,
+      "show_fps": true,
+      "show_frame_count": true,
+      "show_detection_count": true,
+      "show_reid_count": true,
+      "show_model_info": true
+    }
+  },
+
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "log_file": "logs/reid_system.log",
+    "log_format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_log_size_mb": 50,
+    "backup_count": 5,
+    "console_output": true,
+    "progress_bar": true,
+    "log_interval_frames": 100
+  },
+
+  "metrics": {
+    "calculate_metrics": true,
+    "metrics_file": "output/metrics.json",
+    "track_performance": true,
+    "track_accuracy": false,
+    "benchmark_mode": false,
+    "save_detailed_stats": true,
+    "metrics_to_track": [
+      "fps",
+      "processing_time_per_frame",
+      "detection_count",
+      "reid_success_rate",
+      "memory_usage",
+      "gpu_utilization",
+      "inference_time",
+      "tracking_accuracy"
+    ]
+  },
+
+  "debugging": {
+    "debug_mode": false,
+    "save_debug_images": false,
+    "debug_output_dir": "debug/",
+    "verbose_reid": false,
+    "profile_performance": false,
+    "save_intermediate_results": false,
+    "visualize_features": false,
+    "similarity_heatmap": false
+  },
+
+  "experimental": {
+    "multi_camera": false,
+    "camera_ids": [0, 1],
+    "camera_fusion": false,
+    "advanced_tracking": {
+      "kalman_filter": false,
+      "motion_prediction": false,
+      "occlusion_handling": false
+    },
+    "ensemble_reid": {
+      "enable": false,
+      "models": ["osnet_x1_0", "resnet50"],
+      "fusion_method": "average"
+    },
+    "online_learning": {
+      "enable": false,
+      "adaptation_rate": 0.01,
+      "update_frequency": 100
+    }
+  },
+
+  "hardware_optimization": {
+    "cpu_optimization": {
+      "use_mkl": true,
+      "num_threads": -1,
+      "thread_affinity": false
+    },
+    "gpu_optimization": {
+      "cuda_benchmark": true,
+      "cuda_deterministic": false,
+      "memory_fraction": 0.8,
+      "allow_growth": true
+    },
+    "memory_optimization": {
+      "garbage_collection_interval": 1000,
+      "clear_cache_interval": 5000,
+      "optimize_memory_usage": true
+    }
+  },
+
+  "quality_control": {
+    "min_image_quality": 0.5,
+    "blur_threshold": 100,
+    "brightness_range": [30, 220],
+    "contrast_threshold": 0.3,
+    "filter_poor_quality": true,
+    "quality_metrics": {
+      "calculate_blur": false,
+      "calculate_brightness": false,
+      "calculate_contrast": false
+    }
+  },
+
+  "advanced_features": {
+    "temporal_consistency": {
+      "enable": false,
+      "window_size": 10,
+      "consistency_threshold": 0.7
+    },
+    "attribute_analysis": {
+      "enable": false,
+      "attributes": ["gender", "age", "clothing_color"],
+      "attribute_weights": [0.3, 0.2, 0.5]
+    },
+    "scene_analysis": {
+      "enable": false,
+      "roi_detection": false,
+      "crowd_density_estimation": false,
+      "activity_recognition": false
+    }
+  }
+}

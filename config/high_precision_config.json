@@ -1,0 +1,50 @@
+{
+	"_description": "Configuración de alta precisión - Sacrifica velocidad por exactitud",
+	"_version": "2.0",
+
+	"yolo_model": "yolov8s.pt",
+	"yolo_conf_threshold": 0.6,
+	"yolo_iou_threshold": 0.4,
+
+	"reid_model": "osnet_x1_0",
+	"reid_device": "cpu",
+
+	"embedding_buffer_size": 12,
+	"quality_threshold": 0.4,
+	"similarity_threshold": 0.82,
+
+	"track_memory_frames": 50,
+	"cleanup_interval": 200,
+	"max_memory_size": 2000,
+
+	"memory_file": "reid_memory_precision.json",
+
+	"visualization": {
+		"show_quality_scores": true,
+		"show_similarity_scores": true,
+		"show_buffer_sizes": true,
+		"info_panel": true
+	},
+
+	"performance": {
+		"log_interval": 30,
+		"stats_save_interval": 300,
+		"adaptive_threshold_update_frequency": 30
+	},
+
+	"filters": {
+		"min_bbox_width": 40,
+		"min_bbox_height": 80,
+		"min_stable_frames": 5,
+		"track_timeout_seconds": 60
+	},
+
+	"quality_assessment": {
+		"area_weight": 0.25,
+		"sharpness_weight": 0.35,
+		"contrast_weight": 0.25,
+		"aspect_ratio_weight": 0.15,
+		"normalize_area_to": [200, 500],
+		"optimal_aspect_ratio_range": [1.8, 3.5]
+	}
+}

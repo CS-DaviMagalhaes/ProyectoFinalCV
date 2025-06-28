@@ -1,0 +1,574 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Configuración balanceada de alta precisión - Optimal balance entre accuracy y performance",
+    "profile": "balanced_high_precision",
+    "target_hardware": "GPU media (RTX 3060+, GTX 1660+) o CPU potente (i5/Ryzen 5+), RAM > 8GB",
+    "expected_performance": "8-15 FPS en video 1080p",
+    "use_cases": ["Seguridad general", "Análisis comercial", "Investigación estándar", "Aplicaciones profesionales"],
+    "accuracy_priority": "high",
+    "speed_priority": "medium"
+  },
+
+  "models": {
+    "yolo_model": "yolov8m.pt",
+    "reid_model": "osnet_x1_0",
+    "backup_reid_model": "osnet_x0_75",
+    "model_precision": "fp32",
+    "load_in_memory": true,
+    "model_ensemble": {
+      "enable": false,
+      "models": ["osnet_x1_0", "osnet_x0_75"],
+      "fusion_method": "weighted_average",
+      "weights": [0.7, 0.3]
+    },
+    "model_optimization": {
+      "torch_compile": true,
+      "optimization_level": "O1",
+      "enable_cudnn_benchmark": true,
+      "deterministic": false
+    }
+  },
+
+  "hardware": {
+    "device": "cuda",
+    "gpu_id": 0,
+    "mixed_precision": true,
+    "num_workers": 6,
+    "pin_memory": true,
+    "non_blocking": true,
+    "cuda_benchmark": true,
+    "cuda_deterministic": false,
+    "memory_fraction": 0.8,
+    "prefetch_factor": 2,
+    "persistent_workers": true,
+    "multiprocessing_sharing_strategy": "file_system",
+    "fallback_cpu": {
+      "enable": true,
+      "torch_threads": 8,
+      "mkl_threads": 8,
+      "optimize_for_inference": true
+    }
+  },
+
+  "detection": {
+    "min_detection_confidence": 0.6,
+    "max_detections_per_frame": 150,
+    "nms_threshold": 0.4,
+    "iou_threshold": 0.5,
+    "input_resolution": [1024, 1024],
+    "batch_size": 2,
+    "frame_skip": 0,
+    "multi_scale_detection": false,
+    "test_time_augmentation": {
+      "enable": false,
+      "scales": [0.9, 1.0, 1.1],
+      "flips": [false, true],
+      "rotations": []
+    },
+    "detection_enhancement": {
+      "enable": true,
+      "denoising": false,
+      "sharpening": false,
+      "contrast_enhancement": true
+    }
+  },
+
+  "reid": {
+    "similarity_threshold": 0.87,
+    "similarity_metric": "cosine",
+    "feature_normalization": true,
+    "embedding_size": 1024,
+    "batch_processing": true,
+    "batch_size": 16,
+    "preprocessing": {
+      "target_size": [256, 128],
+      "resize_method": "bilinear",
+      "normalize": true,
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225],
+      "augmentation": {
+        "enable": false,
+        "random_flip": false,
+        "color_jitter": false,
+        "random_crop": false,
+        "random_rotation": false
+      },
+      "advanced_preprocessing": {
+        "histogram_equalization": false,
+        "gamma_correction": false,
+        "noise_reduction": false
+      }
+    },
+    "postprocessing": {
+      "feature_fusion": true,
+      "temporal_smoothing": true,
+      "smoothing_window": 7,
+      "feature_enhancement": false,
+      "pca_reduction": false,
+      "whitening": false
+    },
+    "advanced_matching": {
+      "multi_metric_fusion": true,
+      "metrics": ["cosine", "euclidean"],
+      "metric_weights": [0.8, 0.2],
+      "adaptive_threshold": true,
+      "confidence_weighting": true,
+      "distance_weighting": false,
+      "temporal_consistency_check": true,
+      "cross_validation": false
+    },
+    "quality_assessment": {
+      "enable": true,
+      "blur_detection": true,
+      "illumination_analysis": true,
+      "occlusion_detection": false,
+      "pose_analysis": false,
+      "quality_threshold": 0.7
+    }
+  },
+
+  "memory_management": {
+    "disappearance_limit_seconds": 10,
+    "max_stored_embeddings": 500,
+    "cleanup_interval_frames": 400,
+    "embedding_update_strategy": "exponential_moving_average",
+    "update_alpha": 0.3,
+    "memory_cleanup_threshold": 0.8,
+    "persistent_storage": {
+      "enable": true,
+      "cache_directory": "./cache/balanced_precision",
+      "max_cache_size_mb": 2000,
+      "cache_compression": false,
+      "backup_embeddings": true,
+      "versioning": false
+    },
+    "embedding_database": {
+      "enable": true,
+      "database_path": "./db/balanced_precision_embeddings.db",
+      "auto_backup": true,
+      "backup_interval": 1000,
+      "redundancy": false
+    },
+    "memory_optimization": {
+      "gradient_checkpointing": false,
+      "memory_efficient_attention": false,
+      "garbage_collection_interval": 2000,
+      "clear_cache_interval": 10000
+    }
+  },
+
+  "tracking": {
+    "max_age": 60,
+    "min_hits": 4,
+    "iou_threshold": 0.25,
+    "use_byte_tracker": true,
+    "track_high_threshold": 0.8,
+    "track_low_threshold": 0.2,
+    "new_track_threshold": 0.8,
+    "match_threshold": 0.87,
+    "kalman_filter": {
+      "enable": true,
+      "process_noise": 0.01,
+      "measurement_noise": 0.1,
+      "prediction_covariance": 0.1
+    },
+    "motion_prediction": {
+      "enable": true,
+      "prediction_steps": 5,
+      "motion_model": "constant_velocity",
+      "velocity_smoothing": true
+    },
+    "advanced_tracking": {
+      "multi_hypothesis_tracking": false,
+      "max_hypotheses": 3,
+      "pruning_threshold": 0.1,
+      "track_splitting": false,
+      "track_merging": true
+    }
+  },
+
+  "input": {
+    "frame_skip": 0,
+    "max_frames": -1,
+    "resize_input": true,
+    "target_resolution": [1024, 768],
+    "maintain_aspect_ratio": true,
+    "color_space": "RGB",
+    "bit_depth": "8bit",
+    "denoising": {
+      "enable": false,
+      "method": "gaussian",
+      "strength": 0.2,
+      "preserve_edges": true
+    },
+    "enhancement": {
+      "enable": false,
+      "sharpening": 0.0,
+      "contrast": 0.0,
+      "brightness": 0.0,
+      "gamma": 1.0
+    }
+  },
+
+  "output": {
+    "save_video": true,
+    "output_path": "output/balanced_precision/",
+    "video_codec": "h264",
+    "video_quality": 85,
+    "video_bitrate": "15M",
+    "save_frames": false,
+    "frame_format": "jpg",
+    "frame_quality": 85,
+    "save_trajectories": true,
+    "trajectory_format": "json",
+    "save_embeddings": true,
+    "save_statistics": true,
+    "save_raw_detections": false,
+    "save_similarity_matrices": false,
+    "real_time_display": true,
+    "output_resolution": [1920, 1080],
+    "export_formats": ["json", "csv"]
+  },
+
+  "visualization": {
+    "display_settings": {
+      "show_bboxes": true,
+      "show_ids": true,
+      "show_confidence": true,
+      "show_similarity": true,
+      "show_trajectories": true,
+      "show_quality_scores": false,
+      "show_embedding_similarity": false,
+      "trajectory_length": 30,
+      "font_scale": 0.8,
+      "font_thickness": 2,
+      "bbox_thickness": 2,
+      "line_thickness": 2,
+      "high_quality_rendering": false,
+      "anti_aliasing": false
+    },
+    "colors": {
+      "new_person": [0, 255, 0],
+      "reidentified_person": [0, 255, 255],
+      "high_confidence": [0, 255, 0],
+      "medium_confidence": [255, 255, 0],
+      "low_confidence": [255, 165, 0],
+      "very_low_confidence": [255, 0, 0],
+      "lost_track": [128, 128, 128],
+      "uncertain": [255, 0, 255],
+      "occluded": [255, 100, 100],
+      "text_color": [255, 255, 255],
+      "text_background": [0, 0, 0],
+      "trajectory_color": [255, 0, 255],
+      "prediction_color": [100, 255, 100]
+    },
+    "ui_elements": {
+      "show_stats_panel": true,
+      "panel_position": "top_left",
+      "panel_transparency": 0.8,
+      "show_fps": true,
+      "show_frame_count": true,
+      "show_detection_count": true,
+      "show_reid_count": true,
+      "show_model_info": false,
+      "show_gpu_usage": true,
+      "show_memory_usage": true,
+      "show_accuracy_metrics": false,
+      "detailed_statistics": true,
+      "show_similarity_histogram": false,
+      "show_embedding_space": false
+    },
+    "annotation_quality": {
+      "anti_aliasing": false,
+      "subpixel_accuracy": false,
+      "shadow_text": true,
+      "gradient_colors": false,
+      "transparency_effects": false
+    }
+  },
+
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "log_file": "logs/balanced_precision_reid.log",
+    "log_format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_log_size_mb": 50,
+    "backup_count": 5,
+    "console_output": true,
+    "progress_bar": true,
+    "log_interval_frames": 100,
+    "detailed_logging": false,
+    "performance_profiling": false,
+    "memory_profiling": false,
+    "gpu_profiling": false,
+    "log_embeddings": false,
+    "log_similarities": false,
+    "log_decisions": true
+  },
+
+  "metrics": {
+    "calculate_metrics": true,
+    "metrics_file": "output/balanced_precision_metrics.json",
+    "track_performance": true,
+    "track_accuracy": true,
+    "benchmark_mode": false,
+    "save_detailed_stats": true,
+    "export_analytics": true,
+    "analytics_format": ["json", "csv"],
+    "real_time_analytics": false,
+    "metrics_to_track": [
+      "fps", "processing_time_per_frame", "detection_count", "reid_success_rate",
+      "reid_precision", "reid_recall", "track_fragmentation", "id_switches",
+      "memory_usage", "gpu_utilization", "inference_time", "tracking_accuracy",
+      "false_positive_rate", "false_negative_rate", "feature_extraction_time",
+      "similarity_computation_time"
+    ],
+    "confusion_matrix": {
+      "enable": true,
+      "save_matrix": true,
+      "visualization": false,
+      "detailed_analysis": false
+    },
+    "performance_analysis": {
+      "bottleneck_detection": false,
+      "memory_leak_detection": false,
+      "optimization_suggestions": false
+    }
+  },
+
+  "quality_control": {
+    "min_image_quality": 0.7,
+    "blur_threshold": 150,
+    "brightness_range": [20, 235],
+    "contrast_threshold": 0.5,
+    "filter_poor_quality": true,
+    "quality_metrics": {
+      "calculate_blur": true,
+      "calculate_brightness": true,
+      "calculate_contrast": true,
+      "calculate_sharpness": false,
+      "calculate_noise": false,
+      "calculate_exposure": false
+    },
+    "bbox_quality": {
+      "min_bbox_area": 2000,
+      "max_bbox_area": 150000,
+      "min_aspect_ratio": 0.25,
+      "max_aspect_ratio": 5.0,
+      "edge_buffer_pixels": 25,
+      "occlusion_threshold": 0.4,
+      "truncation_threshold": 0.3
+    },
+    "temporal_consistency": {
+      "enable": true,
+      "window_size": 10,
+      "consistency_threshold": 0.8,
+      "motion_smoothness": true,
+      "appearance_consistency": true
+    },
+    "pose_quality": {
+      "enable": false,
+      "frontal_preference": 0.6,
+      "pose_variation_threshold": 45,
+      "keypoint_confidence_threshold": 0.5
+    }
+  },
+
+  "advanced_features": {
+    "multi_hypothesis_tracking": {
+      "enable": false,
+      "max_hypotheses": 3,
+      "pruning_threshold": 0.2,
+      "confidence_propagation": false
+    },
+    "scene_understanding": {
+      "enable": true,
+      "roi_detection": false,
+      "crowd_density_estimation": true,
+      "occlusion_reasoning": false,
+      "scene_context": false,
+      "environmental_adaptation": false
+    },
+    "temporal_reid": {
+      "enable": true,
+      "temporal_window": 10,
+      "temporal_weight": 0.3,
+      "appearance_weight": 0.7,
+      "motion_consistency": 0.2
+    },
+    "cross_camera_tracking": {
+      "enable": false,
+      "camera_topology": "",
+      "appearance_transfer": false,
+      "spatial_temporal_constraints": false
+    },
+    "attribute_based_reid": {
+      "enable": false,
+      "attributes": ["gender", "clothing_color", "clothing_type"],
+      "attribute_weights": [0.3, 0.4, 0.3],
+      "attribute_confidence_threshold": 0.6
+    },
+    "deep_learning_enhancements": {
+      "attention_mechanisms": false,
+      "transformer_features": false,
+      "self_supervised_adaptation": false,
+      "domain_adaptation": false
+    }
+  },
+
+  "debugging": {
+    "debug_mode": false,
+    "save_debug_images": false,
+    "debug_output_dir": "debug/balanced_precision/",
+    "verbose_reid": false,
+    "profile_performance": false,
+    "save_intermediate_results": false,
+    "visualize_features": false,
+    "similarity_heatmap": false,
+    "save_failed_matches": false,
+    "save_successful_matches": false,
+    "track_embedding_evolution": false,
+    "memory_profiling": false,
+    "step_by_step_analysis": false,
+    "decision_tree_logging": false,
+    "comparative_analysis": false
+  },
+
+  "validation": {
+    "enable_validation": false,
+    "validation_interval": 2000,
+    "ground_truth_path": "",
+    "validation_metrics": [
+      "mota", "motp", "idf1", "mt", "ml", "fp", "fn", "idsw"
+    ],
+    "save_validation_results": false,
+    "validation_output_dir": "validation/balanced_precision/",
+    "cross_validation": {
+      "enable": false,
+      "folds": 3,
+      "stratified": true
+    }
+  },
+
+  "optimization": {
+    "gradient_checkpointing": false,
+    "model_quantization": false,
+    "dynamic_batching": true,
+    "adaptive_inference": {
+      "enable": true,
+      "quality_based_switching": false,
+      "load_based_scaling": true
+    },
+    "memory_optimization": {
+      "garbage_collection_interval": 1500,
+      "clear_cache_interval": 8000,
+      "optimize_memory_usage": true,
+      "memory_monitoring": true,
+      "memory_alerts": false
+    },
+    "compute_optimization": {
+      "tensor_cores": true,
+      "mixed_precision_training": false,
+      "graph_optimization": false,
+      "kernel_fusion": false
+    }
+  },
+
+  "security": {
+    "anonymization": {
+      "enable": false,
+      "blur_faces": false,
+      "blur_bodies": false,
+      "encrypt_embeddings": false,
+      "data_protection": false
+    },
+    "access_control": {
+      "enable": false,
+      "api_key_required": false,
+      "log_access": false,
+      "audit_trail": false
+    },
+    "data_integrity": {
+      "checksum_verification": false,
+      "backup_verification": false,
+      "corruption_detection": false
+    }
+  },
+
+  "experimental": {
+    "transformer_reid": {
+      "enable": false,
+      "model_name": "vit_base",
+      "patch_size": 16,
+      "attention_heads": 8
+    },
+    "self_supervised_learning": {
+      "enable": false,
+      "adaptation_rate": 0.001,
+      "update_frequency": 1000,
+      "contrastive_learning": false
+    },
+    "uncertainty_estimation": {
+      "enable": false,
+      "method": "monte_carlo_dropout",
+      "num_samples": 5,
+      "uncertainty_threshold": 0.2
+    },
+    "neural_architecture_search": {
+      "enable": false,
+      "search_space": "micro",
+      "optimization_target": "balanced"
+    },
+    "federated_learning": {
+      "enable": false,
+      "aggregation_method": "fedavg",
+      "privacy_preservation": false
+    }
+  },
+
+  "performance_profiles": {
+    "gpu_high_end": {
+      "device": "cuda",
+      "mixed_precision": false,
+      "batch_size": 4,
+      "input_resolution": [1280, 1280],
+      "similarity_threshold": 0.9
+    },
+    "gpu_mid_range": {
+      "device": "cuda",
+      "mixed_precision": true,
+      "batch_size": 2,
+      "input_resolution": [1024, 1024],
+      "similarity_threshold": 0.87
+    },
+    "cpu_optimized": {
+      "device": "cpu",
+      "mixed_precision": false,
+      "batch_size": 1,
+      "input_resolution": [640, 640],
+      "similarity_threshold": 0.85,
+      "yolo_model": "yolov8s.pt",
+      "reid_model": "osnet_x0_75"
+    }
+  },
+
+  "adaptive_settings": {
+    "enable_adaptive_mode": true,
+    "performance_monitoring": {
+      "target_fps": 12,
+      "fps_tolerance": 2,
+      "adjustment_interval": 200
+    },
+    "quality_vs_speed": {
+      "priority": "balanced",
+      "min_quality_threshold": 0.8,
+      "max_processing_time": 0.1
+    },
+    "resource_management": {
+      "auto_memory_management": true,
+      "auto_batch_size": true,
+      "auto_resolution_scaling": false
+    }
+  }
+}

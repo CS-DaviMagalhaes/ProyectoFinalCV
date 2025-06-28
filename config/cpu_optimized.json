@@ -1,0 +1,142 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Configuración optimizada para CPU y sistemas con recursos limitados",
+    "profile": "cpu_optimized",
+    "target_hardware": "CPU-only, RAM < 8GB",
+    "expected_performance": "15-25 FPS en video 720p"
+  },
+
+  "models": {
+    "yolo_model": "yolov8n.pt",
+    "reid_model": "osnet_x0_25",
+    "model_precision": "fp32",
+    "load_in_memory": false
+  },
+
+  "hardware": {
+    "device": "cpu",
+    "num_workers": 2,
+    "pin_memory": false,
+    "non_blocking": false,
+    "torch_threads": 4,
+    "mkl_threads": 4,
+    "optimize_for_inference": true
+  },
+
+  "detection": {
+    "min_detection_confidence": 0.4,
+    "max_detections_per_frame": 20,
+    "nms_threshold": 0.5,
+    "input_resolution": [640, 480],
+    "batch_size": 1,
+    "frame_skip": 0
+  },
+
+  "reid": {
+    "similarity_threshold": 0.75,
+    "similarity_metric": "cosine",
+    "feature_normalization": true,
+    "embedding_size": 256,
+    "batch_processing": false,
+    "preprocessing": {
+      "target_size": [128, 64],
+      "resize_method": "nearest",
+      "normalize": true,
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
+    }
+  },
+
+  "memory_management": {
+    "disappearance_limit_seconds": 3,
+    "max_stored_embeddings": 50,
+    "cleanup_interval_frames": 150,
+    "embedding_update_strategy": "replace",
+    "memory_cleanup_threshold": 0.7,
+    "garbage_collection_interval": 500
+  },
+
+  "tracking": {
+    "max_age": 15,
+    "min_hits": 2,
+    "iou_threshold": 0.3,
+    "track_buffer": 15,
+    "match_threshold": 0.7
+  },
+
+  "input": {
+    "frame_skip": 1,
+    "max_frames": -1,
+    "resize_input": true,
+    "target_resolution": [640, 480],
+    "color_space": "BGR"
+  },
+
+  "output": {
+    "save_video": false,
+    "real_time_display": true,
+    "save_embeddings": false,
+    "save_statistics": false,
+    "output_resolution": [640, 480]
+  },
+
+  "visualization": {
+    "show_bboxes": true,
+    "show_ids": true,
+    "show_confidence": false,
+    "show_fps": true,
+    "font_scale": 0.5,
+    "bbox_thickness": 1,
+    "colors": {
+      "new_person": [0, 255, 0],
+      "reidentified": [0, 255, 255],
+      "text_background": [0, 0, 0]
+    },
+    "ui_minimal": true
+  },
+
+  "performance": {
+    "log_interval": 200,
+    "progress_bar": false,
+    "benchmark_mode": false,
+    "profile_performance": false,
+    "optimize_memory": true
+  },
+
+  "logging": {
+    "level": "WARNING",
+    "log_to_file": false,
+    "console_output": true,
+    "verbose": false
+  },
+
+  "advanced": {
+    "multi_threading": false,
+    "prefetch_data": false,
+    "cache_embeddings": true,
+    "lazy_loading": true,
+    "memory_efficient_mode": true
+  },
+
+  "quality_control": {
+    "min_bbox_area": 500,
+    "max_bbox_area": 30000,
+    "filter_edge_detections": true,
+    "edge_buffer": 20,
+    "min_aspect_ratio": 0.4,
+    "max_aspect_ratio": 4.0
+  },
+
+  "cpu_specific": {
+    "use_threading": true,
+    "thread_pool_size": 2,
+    "vectorized_operations": true,
+    "memory_mapped_files": false,
+    "compress_features": true,
+    "quantization": {
+      "enable": false,
+      "precision": "int8"
+    }
+  }
+}

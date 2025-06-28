@@ -1,0 +1,50 @@
+{
+	"_description": "Configuración robusta para el sistema de Re-ID mejorado",
+	"_version": "2.0",
+
+	"yolo_model": "yolov8n.pt",
+	"yolo_conf_threshold": 0.4,
+	"yolo_iou_threshold": 0.5,
+
+	"reid_model": "osnet_x1_0",
+	"reid_device": "cpu",
+
+	"embedding_buffer_size": 7,
+	"quality_threshold": 0.25,
+	"similarity_threshold": 0.75,
+
+	"track_memory_frames": 30,
+	"cleanup_interval": 100,
+	"max_memory_size": 1000,
+
+	"memory_file": "reid_memory_robust.json",
+
+	"visualization": {
+		"show_quality_scores": true,
+		"show_similarity_scores": true,
+		"show_buffer_sizes": true,
+		"info_panel": true
+	},
+
+	"performance": {
+		"log_interval": 30,
+		"stats_save_interval": 300,
+		"adaptive_threshold_update_frequency": 20
+	},
+
+	"filters": {
+		"min_bbox_width": 30,
+		"min_bbox_height": 50,
+		"min_stable_frames": 3,
+		"track_timeout_seconds": 30
+	},
+
+	"quality_assessment": {
+		"area_weight": 0.3,
+		"sharpness_weight": 0.3,
+		"contrast_weight": 0.2,
+		"aspect_ratio_weight": 0.2,
+		"normalize_area_to": [150, 400],
+		"optimal_aspect_ratio_range": [1.5, 4.0]
+	}
+}

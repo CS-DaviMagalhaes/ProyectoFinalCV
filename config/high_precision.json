@@ -1,0 +1,394 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Configuración de alta precisión para aplicaciones críticas",
+    "profile": "high_precision",
+    "target_hardware": "GPU potente (RTX 3080+, V100+), RAM > 16GB",
+    "expected_performance": "5-15 FPS en video 1080p+",
+    "use_cases": ["Seguridad crítica", "Investigación forense", "Análisis detallado"]
+  },
+
+  "models": {
+    "yolo_model": "yolov8l.pt",
+    "reid_model": "osnet_ain_x1_0",
+    "backup_reid_model": "resnet50",
+    "model_precision": "fp32",
+    "load_in_memory": true,
+    "model_ensemble": {
+      "enable": false,
+      "models": ["osnet_ain_x1_0", "resnet50"],
+      "fusion_method": "weighted_average",
+      "weights": [0.6, 0.4]
+    }
+  },
+
+  "hardware": {
+    "device": "cuda",
+    "gpu_id": 0,
+    "mixed_precision": false,
+    "torch_compile": true,
+    "num_workers": 8,
+    "pin_memory": true,
+    "non_blocking": true,
+    "cuda_benchmark": true,
+    "cuda_deterministic": true,
+    "memory_fraction": 0.9,
+    "tensorrt_optimization": {
+      "enable": false,
+      "precision": "fp16",
+      "workspace_size": 2147483648
+    }
+  },
+
+  "detection": {
+    "min_detection_confidence": 0.7,
+    "max_detections_per_frame": 200,
+    "nms_threshold": 0.35,
+    "iou_threshold": 0.4,
+    "input_resolution": [1280, 1280],
+    "batch_size": 4,
+    "frame_skip": 0,
+    "multi_scale_detection": true,
+    "test_time_augmentation": {
+      "enable": false,
+      "scales": [0.8, 1.0, 1.2],
+      "flips": [false, true]
+    }
+  },
+
+  "reid": {
+    "similarity_threshold": 0.92,
+    "similarity_metric": "cosine",
+    "feature_normalization": true,
+    "embedding_size": 512,
+    "batch_processing": true,
+    "batch_size": 16,
+    "preprocessing": {
+      "target_size": [256, 128],
+      "resize_method": "bicubic",
+      "normalize": true,
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225],
+      "augmentation": {
+        "enable": false,
+        "random_flip": false,
+        "color_jitter": false,
+        "random_crop": false
+      }
+    },
+    "postprocessing": {
+      "feature_fusion": true,
+      "temporal_smoothing": true,
+      "smoothing_window": 7,
+      "feature_enhancement": true
+    },
+    "advanced_matching": {
+      "multi_metric_fusion": true,
+      "metrics": ["cosine", "euclidean"],
+      "metric_weights": [0.7, 0.3],
+      "adaptive_threshold": true,
+      "confidence_weighting": true
+    }
+  },
+
+  "memory_management": {
+    "disappearance_limit_seconds": 15,
+    "max_stored_embeddings": 2000,
+    "cleanup_interval_frames": 500,
+    "embedding_update_strategy": "exponential_moving_average",
+    "update_alpha": 0.3,
+    "memory_cleanup_threshold": 0.85,
+    "persistent_storage": {
+      "enable": true,
+      "cache_directory": "./cache/high_precision",
+      "max_cache_size_mb": 2000,
+      "cache_compression": true,
+      "backup_embeddings": true
+    },
+    "embedding_database": {
+      "enable": true,
+      "database_path": "./db/embeddings.db",
+      "auto_backup": true,
+      "backup_interval": 1000
+    }
+  },
+
+  "tracking": {
+    "max_age": 50,
+    "min_hits": 5,
+    "iou_threshold": 0.2,
+    "use_byte_tracker": true,
+    "track_high_threshold": 0.8,
+    "track_low_threshold": 0.3,
+    "new_track_threshold": 0.8,
+    "match_threshold": 0.9,
+    "kalman_filter": {
+      "enable": true,
+      "process_noise": 0.01,
+      "measurement_noise": 0.1
+    },
+    "motion_prediction": {
+      "enable": true,
+      "prediction_steps": 5,
+      "motion_model": "constant_velocity"
+    }
+  },
+
+  "input": {
+    "frame_skip": 0,
+    "max_frames": -1,
+    "resize_input": false,
+    "maintain_aspect_ratio": true,
+    "color_space": "RGB",
+    "bit_depth": "8bit",
+    "denoising": {
+      "enable": false,
+      "method": "gaussian",
+      "strength": 0.5
+    }
+  },
+
+  "output": {
+    "save_video": true,
+    "output_path": "output/high_precision/",
+    "video_codec": "h264",
+    "video_quality": 100,
+    "video_bitrate": "10M",
+    "save_frames": true,
+    "frame_format": "png",
+    "frame_quality": 100,
+    "save_trajectories": true,
+    "trajectory_format": "json",
+    "save_embeddings": true,
+    "save_statistics": true,
+    "real_time_display": false,
+    "output_resolution": [1920, 1080]
+  },
+
+  "visualization": {
+    "display_settings": {
+      "show_bboxes": true,
+      "show_ids": true,
+      "show_confidence": true,
+      "show_similarity": true,
+      "show_trajectories": true,
+      "trajectory_length": 50,
+      "font_scale": 0.8,
+      "font_thickness": 2,
+      "bbox_thickness": 3,
+      "line_thickness": 2,
+      "high_quality_rendering": true
+    },
+    "colors": {
+      "new_person": [0, 255, 0],
+      "reidentified_person": [0, 255, 255],
+      "high_confidence": [0, 255, 0],
+      "medium_confidence": [255, 255, 0],
+      "low_confidence": [255, 165, 0],
+      "lost_track": [128, 128, 128],
+      "uncertain": [255, 0, 255],
+      "text_color": [255, 255, 255],
+      "text_background": [0, 0, 0],
+      "trajectory_color": [255, 0, 255]
+    },
+    "ui_elements": {
+      "show_stats_panel": true,
+      "panel_position": "top_left",
+      "panel_transparency": 0.8,
+      "show_fps": true,
+      "show_frame_count": true,
+      "show_detection_count": true,
+      "show_reid_count": true,
+      "show_model_info": true,
+      "show_gpu_usage": true,
+      "show_memory_usage": true,
+      "detailed_statistics": true
+    },
+    "annotation_quality": {
+      "anti_aliasing": true,
+      "subpixel_accuracy": true,
+      "shadow_text": true,
+      "gradient_colors": false
+    }
+  },
+
+  "logging": {
+    "level": "DEBUG",
+    "log_to_file": true,
+    "log_file": "logs/high_precision_reid.log",
+    "log_format": "%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s",
+    "max_log_size_mb": 100,
+    "backup_count": 10,
+    "console_output": true,
+    "progress_bar": true,
+    "log_interval_frames": 50,
+    "detailed_logging": true,
+    "performance_profiling": true
+  },
+
+  "metrics": {
+    "calculate_metrics": true,
+    "metrics_file": "output/high_precision_metrics.json",
+    "track_performance": true,
+    "track_accuracy": true,
+    "benchmark_mode": false,
+    "save_detailed_stats": true,
+    "export_analytics": true,
+    "analytics_format": ["json", "csv"],
+    "metrics_to_track": [
+      "fps",
+      "processing_time_per_frame",
+      "detection_count",
+      "reid_success_rate",
+      "reid_precision",
+      "reid_recall",
+      "track_fragmentation",
+      "id_switches",
+      "memory_usage",
+      "gpu_utilization",
+      "inference_time",
+      "tracking_accuracy",
+      "false_positive_rate",
+      "false_negative_rate",
+      "feature_extraction_time",
+      "similarity_computation_time"
+    ],
+    "confusion_matrix": {
+      "enable": true,
+      "save_matrix": true,
+      "visualization": true
+    }
+  },
+
+  "quality_control": {
+    "min_image_quality": 0.8,
+    "blur_threshold": 150,
+    "brightness_range": [20, 235],
+    "contrast_threshold": 0.5,
+    "filter_poor_quality": true,
+    "quality_metrics": {
+      "calculate_blur": true,
+      "calculate_brightness": true,
+      "calculate_contrast": true,
+      "calculate_sharpness": true
+    },
+    "bbox_quality": {
+      "min_bbox_area": 2000,
+      "max_bbox_area": 100000,
+      "min_aspect_ratio": 0.2,
+      "max_aspect_ratio": 6.0,
+      "edge_buffer_pixels": 30,
+      "occlusion_threshold": 0.3
+    },
+    "temporal_consistency": {
+      "enable": true,
+      "window_size": 15,
+      "consistency_threshold": 0.8,
+      "motion_smoothness": true
+    }
+  },
+
+  "advanced_features": {
+    "multi_hypothesis_tracking": {
+      "enable": true,
+      "max_hypotheses": 5,
+      "pruning_threshold": 0.1
+    },
+    "scene_understanding": {
+      "enable": true,
+      "roi_detection": true,
+      "crowd_density_estimation": true,
+      "occlusion_reasoning": true
+    },
+    "temporal_reid": {
+      "enable": true,
+      "temporal_window": 10,
+      "temporal_weight": 0.3,
+      "appearance_weight": 0.7
+    },
+    "cross_camera_tracking": {
+      "enable": false,
+      "camera_topology": "",
+      "appearance_transfer": false
+    },
+    "attribute_based_reid": {
+      "enable": false,
+      "attributes": ["gender", "age_group", "clothing_color", "clothing_type"],
+      "attribute_weights": [0.2, 0.2, 0.3, 0.3]
+    }
+  },
+
+  "debugging": {
+    "debug_mode": true,
+    "save_debug_images": true,
+    "debug_output_dir": "debug/high_precision/",
+    "verbose_reid": true,
+    "profile_performance": true,
+    "save_intermediate_results": true,
+    "visualize_features": true,
+    "similarity_heatmap": true,
+    "save_failed_matches": true,
+    "track_embedding_evolution": true,
+    "memory_profiling": true
+  },
+
+  "validation": {
+    "enable_validation": true,
+    "validation_interval": 1000,
+    "ground_truth_path": "",
+    "validation_metrics": [
+      "mota", "motp", "idf1", "mt", "ml", "fp", "fn", "idsw"
+    ],
+    "save_validation_results": true,
+    "validation_output_dir": "validation/high_precision/"
+  },
+
+  "optimization": {
+    "gradient_checkpointing": false,
+    "model_quantization": false,
+    "dynamic_batching": true,
+    "adaptive_inference": {
+      "enable": true,
+      "quality_based_switching": true,
+      "load_based_scaling": true
+    },
+    "memory_optimization": {
+      "garbage_collection_interval": 2000,
+      "clear_cache_interval": 10000,
+      "optimize_memory_usage": true,
+      "memory_monitoring": true
+    }
+  },
+
+  "security": {
+    "anonymization": {
+      "enable": false,
+      "blur_faces": false,
+      "blur_bodies": false,
+      "encrypt_embeddings": false
+    },
+    "access_control": {
+      "enable": false,
+      "api_key_required": false,
+      "log_access": true
+    }
+  },
+
+  "experimental": {
+    "transformer_reid": {
+      "enable": false,
+      "model_name": "vit_base",
+      "patch_size": 16
+    },
+    "self_supervised_learning": {
+      "enable": false,
+      "adaptation_rate": 0.001,
+      "update_frequency": 500
+    },
+    "uncertainty_estimation": {
+      "enable": false,
+      "method": "monte_carlo_dropout",
+      "num_samples": 10
+    }
+  }
+}

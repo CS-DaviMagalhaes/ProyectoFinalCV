@@ -1,0 +1,326 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Configuración optimizada para tiempo real con webcam",
+    "profile": "webcam_realtime",
+    "target_hardware": "GPU media/CPU potente, webcam 720p/1080p",
+    "expected_performance": "20-30 FPS en video webcam 720p",
+    "use_cases": ["Demostración en vivo", "Prototipo interactivo", "Monitoreo en tiempo real"]
+  },
+
+  "models": {
+    "yolo_model": "yolov8s.pt",
+    "reid_model": "osnet_x0_75",
+    "model_precision": "fp16",
+    "load_in_memory": true,
+    "warmup_iterations": 10
+  },
+
+  "hardware": {
+    "device": "cuda",
+    "gpu_id": 0,
+    "mixed_precision": true,
+    "torch_compile": false,
+    "num_workers": 2,
+    "pin_memory": true,
+    "non_blocking": true,
+    "cuda_benchmark": true,
+    "cuda_deterministic": false,
+    "memory_fraction": 0.6
+  },
+
+  "webcam_settings": {
+    "camera_id": 0,
+    "resolution": [1280, 720],
+    "fps": 30,
+    "buffer_size": 1,
+    "auto_exposure": true,
+    "auto_white_balance": true,
+    "brightness": 0.5,
+    "contrast": 0.5,
+    "saturation": 0.5,
+    "capture_format": "MJPG",
+    "threading": true,
+    "backend": "AUTO"
+  },
+
+  "detection": {
+    "min_detection_confidence": 0.5,
+    "max_detections_per_frame": 50,
+    "nms_threshold": 0.45,
+    "iou_threshold": 0.5,
+    "input_resolution": [640, 640],
+    "batch_size": 1,
+    "frame_skip": 0,
+    "detection_frequency": 1,
+    "roi_detection": {
+      "enable": false,
+      "roi_box": [0.1, 0.1, 0.9, 0.9]
+    }
+  },
+
+  "reid": {
+    "similarity_threshold": 0.82,
+    "similarity_metric": "cosine",
+    "feature_normalization": true,
+    "embedding_size": 512,
+    "batch_processing": false,
+    "preprocessing": {
+      "target_size": [256, 128],
+      "resize_method": "bilinear",
+      "normalize": true,
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
+    },
+    "realtime_optimization": {
+      "skip_low_quality": true,
+      "min_bbox_area": 1500,
+      "edge_exclusion_pixels": 50,
+      "fast_feature_extraction": true
+    }
+  },
+
+  "memory_management": {
+    "disappearance_limit_seconds": 8,
+    "max_stored_embeddings": 100,
+    "cleanup_interval_frames": 200,
+    "embedding_update_strategy": "replace",
+    "memory_cleanup_threshold": 0.8,
+    "realtime_gc": {
+      "enable": true,
+      "gc_interval_frames": 300,
+      "force_gc_threshold": 0.9
+    }
+  },
+
+  "tracking": {
+    "max_age": 20,
+    "min_hits": 3,
+    "iou_threshold": 0.3,
+    "use_byte_tracker": true,
+    "track_high_threshold": 0.6,
+    "track_low_threshold": 0.2,
+    "new_track_threshold": 0.7,
+    "match_threshold": 0.8,
+    "realtime_tracking": {
+      "prediction_enabled": true,
+      "smooth_trajectories": true,
+      "fast_association": true
+    }
+  },
+
+  "input": {
+    "input_type": "webcam",
+    "webcam_id": 0,
+    "frame_skip": 0,
+    "max_frames": -1,
+    "resize_input": true,
+    "target_resolution": [1280, 720],
+    "maintain_aspect_ratio": true,
+    "color_space": "BGR",
+    "buffer_management": {
+      "buffer_size": 2,
+      "drop_frames": true,
+      "latest_frame_only": true
+    }
+  },
+
+  "output": {
+    "save_video": false,
+    "real_time_display": true,
+    "display_resolution": [1280, 720],
+    "save_embeddings": false,
+    "save_statistics": false,
+    "display_buffer": 1,
+    "vsync": false,
+    "low_latency_mode": true
+  },
+
+  "visualization": {
+    "display_settings": {
+      "show_bboxes": true,
+      "show_ids": true,
+      "show_confidence": true,
+      "show_similarity": false,
+      "show_trajectories": true,
+      "trajectory_length": 20,
+      "font_scale": 0.6,
+      "font_thickness": 2,
+      "bbox_thickness": 2,
+      "line_thickness": 2,
+      "fast_rendering": true
+    },
+    "colors": {
+      "new_person": [0, 255, 0],
+      "reidentified_person": [0, 255, 255],
+      "active_track": [255, 255, 0],
+      "lost_track": [128, 128, 128],
+      "uncertain": [255, 165, 0],
+      "text_color": [255, 255, 255],
+      "text_background": [0, 0, 0],
+      "trajectory_color": [255, 0, 255]
+    },
+    "ui_elements": {
+      "show_stats_panel": true,
+      "panel_position": "top_right",
+      "panel_transparency": 0.7,
+      "show_fps": true,
+      "show_frame_count": false,
+      "show_detection_count": true,
+      "show_reid_count": true,
+      "show_model_info": false,
+      "show_latency": true,
+      "compact_display": true
+    },
+    "realtime_ui": {
+      "update_frequency_hz": 30,
+      "smooth_animations": false,
+      "minimal_ui": false,
+      "click_to_track": false
+    }
+  },
+
+  "performance": {
+    "target_fps": 25,
+    "max_latency_ms": 100,
+    "frame_dropping": {
+      "enable": true,
+      "max_buffer_size": 3,
+      "drop_strategy": "oldest"
+    },
+    "threading": {
+      "detection_thread": true,
+      "reid_thread": false,
+      "display_thread": true,
+      "io_thread": true
+    },
+    "optimization": {
+      "skip_frames_when_slow": true,
+      "adaptive_quality": true,
+      "dynamic_resolution": false,
+      "priority_processing": "detection"
+    }
+  },
+
+  "logging": {
+    "level": "INFO",
+    "log_to_file": false,
+    "console_output": true,
+    "progress_bar": false,
+    "log_interval_frames": 300,
+    "realtime_stats": {
+      "show_fps": true,
+      "show_latency": true,
+      "show_memory": false,
+      "update_interval": 1.0
+    }
+  },
+
+  "controls": {
+    "keyboard_shortcuts": {
+      "enable": true,
+      "quit": "q",
+      "pause": "space",
+      "save_frame": "s",
+      "toggle_display": "d",
+      "reset_tracking": "r",
+      "increase_threshold": "plus",
+      "decrease_threshold": "minus"
+    },
+    "mouse_interaction": {
+      "enable": false,
+      "click_to_focus": false,
+      "drag_to_roi": false
+    }
+  },
+
+  "quality_control": {
+    "min_bbox_area": 1000,
+    "max_bbox_area": 50000,
+    "filter_edge_detections": true,
+    "edge_buffer": 30,
+    "min_aspect_ratio": 0.3,
+    "max_aspect_ratio": 5.0,
+    "motion_filtering": {
+      "enable": true,
+      "min_movement_pixels": 5,
+      "static_threshold_seconds": 2
+    }
+  },
+
+  "realtime_features": {
+    "frame_interpolation": false,
+    "motion_prediction": {
+      "enable": true,
+      "prediction_frames": 3,
+      "confidence_decay": 0.9
+    },
+    "adaptive_processing": {
+      "enable": true,
+      "fps_monitoring": true,
+      "auto_adjust_quality": true,
+      "performance_target": "fps"
+    },
+    "live_statistics": {
+      "fps_counter": true,
+      "latency_monitor": true,
+      "memory_monitor": false,
+      "detection_rate": true,
+      "reid_success_rate": true
+    }
+  },
+
+  "error_handling": {
+    "camera_disconnect": {
+      "auto_reconnect": true,
+      "reconnect_attempts": 5,
+      "reconnect_delay_seconds": 2
+    },
+    "gpu_memory_error": {
+      "fallback_to_cpu": true,
+      "reduce_batch_size": true,
+      "clear_cache": true
+    },
+    "processing_timeout": {
+      "timeout_seconds": 5,
+      "skip_frame_on_timeout": true,
+      "reset_on_timeout": false
+    }
+  },
+
+  "debug": {
+    "debug_mode": false,
+    "save_debug_frames": false,
+    "show_processing_time": true,
+    "fps_debugging": false,
+    "memory_debugging": false
+  },
+
+  "experimental": {
+    "frame_prediction": false,
+    "smart_roi": {
+      "enable": false,
+      "dynamic_roi": false,
+      "person_following": false
+    },
+    "background_subtraction": {
+      "enable": false,
+      "method": "MOG2",
+      "learning_rate": 0.01
+    }
+  },
+
+  "calibration": {
+    "auto_calibration": {
+      "enable": false,
+      "calibration_frames": 100,
+      "adjust_thresholds": true,
+      "optimize_for_scene": true
+    },
+    "scene_adaptation": {
+      "enable": false,
+      "adaptation_rate": 0.01,
+      "min_adaptation_samples": 50
+    }
+  }
+}
